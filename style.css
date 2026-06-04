@@ -1,0 +1,755 @@
+:root {
+            --yma-red: #c90000;
+            --dark-bg: #000000;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #f3f4f6;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 15px 0 5px 0;
+            color: #111;
+            text-align: center;
+        }
+
+        /* Responsive Layout Grid */
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 1300px;
+            margin-top: 10px;
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                flex-direction: row;
+                align-items: flex-start;
+                padding: 10px;
+            }
+
+            body {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 32px;
+                margin-bottom: 15px;
+            }
+        }
+
+        /* Form Configuration Control Board */
+        .form-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 550px;
+        }
+
+        .form-panel h2 {
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid var(--yma-red);
+            padding-bottom: 8px;
+            font-size: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            background-color: #fff;
+            width: 100%;
+        }
+
+        .row-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .counter-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        /* Download Action Button Styling */
+        .btn-download {
+            background-color: #1b3d2f;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-download:hover {
+            background-color: #132b21;
+        }
+
+        .btn-download:active {
+            transform: scale(0.99);
+        }
+
+        /* Responsive Poster View Scale Frame Box Wrapper */
+        .poster-scale-box {
+            width: 100%;
+            max-width: 700px;
+            aspect-ratio: 1 / 1;
+            position: relative;
+        }
+
+        /* 1:1 Clean Rendered Poster Layout to match image layout specs */
+        .poster-preview {
+            width: 700px;
+            height: 700px;
+            background: #fdfdfd;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: top left;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Top Header Image Strip Area */
+        .poster-header-banner {
+            width: 100%;
+            height: 100px;
+            position: relative;
+            background: var(--yma-red);
+        }
+
+        .poster-header-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+        }
+
+        /* Floating Header Subtitle Text directly aligned beneath ZUALKO header area */
+        .header-dynamic-subtitle {
+            position: absolute;
+            right: 45px;
+            bottom: 12px;
+            color: #ffffff;
+            font-size: 19px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-align: right;
+            text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Triple Column Structural Main Body Space */
+        .poster-body {
+            display: grid;
+            grid-template-columns: 50% 30% 20%;
+            padding: 15px 10px 5px 20px;
+            height: 245px;
+            align-items: center;
+        }
+
+        /* Left Info Side text styling blocks */
+        .details-side {
+            font-size: 15px;
+            line-height: 1.4;
+            color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 2px;
+        }
+
+        /* Aligns label, colon, and value perfectly into columns */
+        .details-side p {
+            display: grid;
+            grid-template-columns: 78px 12px 1fr;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .details-side span.label {
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .details-side span.colon {
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .details-side span.val {
+            font-weight: 800;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Middle Centered Frame Avatar Container */
+        .avatar-center-zone {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .avatar-container {
+            width: 175px;
+            height: 175px;
+            border-radius: 50%;
+            border: 5px solid #111;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.45);
+            overflow: hidden;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Right Side Column QR Target Layout Space block positioning */
+        .qr-right-zone {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-right: 5px;
+        }
+
+        .qr-right-zone h4 {
+            font-size: 16px;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 8px;
+            color: #000;
+        }
+
+        .qr-box {
+            width: 85px;
+            height: 85px;
+            border: 1px dashed #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+        }
+
+        .qr-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* Middle Condolence Horizontal Ribbon Banner Strip Separator Component */
+        .condolence-bar {
+            text-align: center;
+            font-size: 17px;
+            font-weight: 700;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 2px;
+            color: #000;
+        }
+
+        .condolence-flag {
+            height: 14px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* User-controlled Satellite Maps Canvas Area layout container block specifications */
+        .map-wrapper {
+            padding: 0 15px;
+            height: 195px;
+            margin-top: 4px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .map-area {
+            width: 66%;
+            height: 100%;
+            background: #1b3d2f;
+            border: 1px solid #bbb;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .map-area img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Numeric Statistics Display Layout Row Matrix items metrics blocks space tracking elements */
+        .counters-section {
+            padding: 6px 60px 2px 60px;
+            font-weight: 800;
+            font-size: 15.5px;
+        }
+
+        .counter-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2px;
+            color: #c90000;
+            text-transform: uppercase;
+        }
+
+        .total-row {
+            text-align: center;
+            font-size: 15.5px;
+            color: #c90000;
+            margin-top: 1px;
+            letter-spacing: 0.2px;
+            text-transform: uppercase;
+        }
+
+        /* Bottom Dynamic Manual Content Footer Space Box Notice strip panel container */
+        .poster-footer {
+            background: var(--dark-bg);
+            color: white;
+            text-align: center;
+            padding: 8px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* ==========================================================================
+   NEW ADMINISTRATIVE COMPONENT DESIGNS AND REUSABLE DATA TABLES
+   ========================================================================== */
+
+.btn-submit {
+    background-color: #0b5ed7;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 15px;
+    transition: background 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-submit:hover {
+    background-color: #0a58ca;
+}
+
+.btn-submit:active {
+    transform: scale(0.99);
+}
+
+.admin-data-section {
+    width: 100%;
+    max-width: 1300px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+    margin-bottom: 5px;
+    padding: 20px;
+}
+
+.admin-auth-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.admin-auth-header h3 {
+    font-size: 18px;
+    color: #222;
+}
+
+#adminLoginArea input {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+#adminLoginArea button, #adminLogoutArea button {
+    padding: 6px 12px;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#adminLoginArea button {
+    background-color: #212529;
+    color: white;
+}
+
+.admin-badge {
+    background-color: #e6f4ea;
+    color: #137333;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.btn-logout {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Responsive Table Layout Matrix rules */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    text-align: left;
+    font-size: 14px;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: 700;
+    color: #495057;
+}
+
+tr:hover {
+    background-color: #f8f9fa;
+}
+
+.table-thumb {
+    width: 42px;
+    height: 42px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    display: block;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background-color: #bb2d3b;
+}
+
+/* ==========================================================================
+   TABLE SYSTEM COMPONENT EXTENSIONS & IMAGE SIZE EXPANSIONS
+   ========================================================================== */
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.btn-pdf {
+    background-color: #198754;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s ease;
+}
+
+.btn-pdf:hover {
+    background-color: #157347;
+}
+
+/* Enlarged Profile Photo Styles inside the Information Table Grid */
+.table-thumb {
+    width: 80px;         /* Increased from 42px to 80px */
+    height: 80px;        /* Increased from 42px to 80px */
+    object-fit: cover;
+    border-radius: 8px;  /* Changed to a clean rounded rectangle for better visibility */
+    border: 2px solid #222;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    display: block;
+    margin: 0 auto;
+}
+
+th, td {
+    vertical-align: middle; /* Ensures text aligns perfectly beside the larger image frames */
+}
+
+/* ==========================================================================
+   FORM MANAGEMENT BUTTON AND INTERACTIVE HOVER ACTIONS
+   ========================================================================== */
+
+/* ==========================================================================
+   FORM MANAGEMENT BUTTON AND INTERACTIVE HOVER ACTIONS
+   ========================================================================== */
+.btn-submit {
+    background-color: #0b5ed7;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 15px;
+    transition: background 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-submit:hover {
+    background-color: #0a58ca;
+}
+
+.btn-submit:active {
+    transform: scale(0.99);
+}
+
+.admin-data-section {
+    width: 100%;
+    max-width: 1300px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin: 30px 0 20px 0;
+    padding: 20px;
+}
+
+.admin-auth-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.admin-auth-header h3 {
+    font-size: 18px;
+    color: #222;
+}
+
+/* EXTRACT TO PDF BUTTON STYLING */
+.btn-extract-pdf {
+    background-color: #0dcaf0;
+    color: #212529;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 7px 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-extract-pdf:hover {
+    background-color: #31d2f2;
+    color: #000;
+}
+
+#adminLoginArea input {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+#adminLoginArea button, #adminLogoutArea button {
+    padding: 7px 14px;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#adminLoginArea button {
+    background-color: #212529;
+    color: white;
+}
+
+.admin-badge {
+    background-color: #e6f4ea;
+    color: #137333;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.btn-logout {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* ==========================================================================
+   DATA SHEET CONTAINER GRID DESIGNS AND IMAGE FRAMING
+   ========================================================================== */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    text-align: left;
+    font-size: 14px;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #dee2e6;
+    vertical-align: middle;
+}
+
+th {
+    background-color: #1b3d2f;
+    font-weight: 700;
+    color: white;
+}
+
+tr:hover {
+    background-color: #f8f9fa;
+}
+
+.table-thumb {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid #111;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    display: block;
+    margin: 0 auto;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.btn-delete:hover {
+    background-color: #bb2d3b;
+}
