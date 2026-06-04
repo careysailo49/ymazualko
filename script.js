@@ -251,7 +251,7 @@ function toggleAdminElements(show) {
 }
 
 window.deleteRecord = function(id) {
-    if(confirm("He record hi i hlohtla duh chiang em?")) {
+    if(confirm("He record hi i paih duh chiang maw?")) {
         let storageData = JSON.parse(localStorage.getItem('zualkoRecords')) || [];
         storageData = storageData.filter(item => item.id !== id);
         localStorage.setItem('zualkoRecords', JSON.stringify(storageData));
