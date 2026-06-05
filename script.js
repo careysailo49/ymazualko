@@ -327,7 +327,7 @@ document.getElementById('btnExtractTablePDF').addEventListener('click', function
 
     doc.setFont("Helvetica", "bold");
     doc.setFontSize(16);
-    doc.text("Khuangpuilam YMA Zualko Khawlkhawmna List", 14, 15);
+    doc.text("Khuangpuilam YMA Zualko Khawlkhawmna", 14, 15);
     
     doc.setFont("Helvetica", "normal");
     doc.setFontSize(9);
@@ -379,5 +379,5 @@ document.getElementById('btnExtractTablePDF').addEventListener('click', function
         }
     });
 
-    doc.save('Zualko_Khawlkhawmna_List.pdf');
+    doc.save('Zualko_Khawlkhawmna.pdf');
 });
