@@ -9,250 +9,302 @@
     <!-- jsPDF Engine and autoTable Dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+    
+    <!-- Firebase Compatibility SDKs for Real-time Cross-device Sync -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <h1>Khuangpuilam YMA Zualko</h1>
-
-    <div class="container">
-        <div class="form-panel">
-            <h2>Chanchin Ziahluhna</h2>
-
-            <div class="form-group">
-                <label>Zualko Subtitle Banner Text (e.g., Kum 2026-a 7-na)</label>
-                <input type="text" id="inHeaderText" value="Kum 2026-a 7-na">
-            </div>
-
-            <div class="row-group">
-                <div class="form-group">
-                    <label>Hming (Name)</label>
-                    <input type="text" id="inHming" value="">
-                </div>
-                <div class="form-group">
-                    <label>Kum (Age)</label>
-                    <input type="number" id="inKum" value="">
-                </div>
-            </div>
-
-            <div class="row-group">
-                <div class="form-group">
-                    <label>Chhungte (Relation & Name)</label>
-                    <div style="display: grid; grid-template-columns: 80px 1fr; gap: 8px;">
-                        <select id="inRelationType">
-                            <option value="W/o">W/o</option>
-                            <option value="H/o">H/o</option>
-                            <option value="S/o" selected>S/o</option>
-                            <option value="D/o">D/o</option>
-                            <option value="C/o">C/o</option>
-                        </select>
-                        <input type="text" id="inSo" value="">
+    <!-- ==========================================================================
+       FIRST PAGE: UNIFIED LOGIN PORTAL (User & Admin Portals Together)
+       ========================================================================== -->
+    <div id="loginPortalGate" class="portal-overlay">
+        <div class="portal-wrapper">
+            <h2>Khuangpuilam YMA Zualko Terminal</h2>
+            <p class="portal-subtitle">Khawngaihin i luhna tur zawn zawk thlang rawh</p>
+            
+            <div class="portal-grid">
+                <!-- User Login Box -->
+                <div class="portal-card user-card">
+                    <h3>User Login</h3>
+                    <p>Zualko chanchin thar thun luh leh enna</p>
+                    <div class="portal-form-group">
+                        <label>Username</label>
+                        <input type="text" id="userLoginName" placeholder="Enter user username">
                     </div>
-                </div>
-                <div class="form-group">
-                    <label>Section</label>
-                    <select id="inSection">
-                        <option value="Chawngbawla Section" selected>Chawngbawla Section</option>
-                        <option value="Vanapa Section">Vanapa Section</option>
-                        <option value="Taitesena Section">Taitesena Section</option>
-                        <option value="Khuangchera Section">Khuangchera Section</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="row-group">
-                <div class="form-group">
-                    <label>Thih Ni (Date of Death)</label>
-                    <input type="date" id="inThihNi">
-                </div>
-                <div class="form-group">
-                    <label>Thih Hun (Time of Death)</label>
-                    <input type="time" id="inThihHun">
-                </div>
-            </div>
-
-            <div class="row-group">
-                <div class="form-group">
-                    <label>Vui Ni (Funeral Date)</label>
-                    <input type="date" id="inVuiNi">
-                </div>
-                <div class="form-group">
-                    <label>Vui Hun (Funeral Time)</label>
-                    <input type="time" id="inVuiHun">
-                </div>
-            </div>
-
-            <div class="row-group">
-                <div class="form-group">
-                    <label>Vuitu (Officiator)</label>
-                    <input type="text" id="inVuitu" value="">
-                </div>
-                <div class="form-group">
-                    <label>Kohhran (Church)</label>
-                    <input type="text" id="inKohhran" value="">
-                </div>
-            </div>
-
-            <div class="row-group">
-                <div class="form-group">
-                    <label>Upload Passport Photo</label>
-                    <input type="file" id="inPassport" accept="image/*">
-                </div>
-                <div class="form-group">
-                    <label>Upload QR Code</label>
-                    <input type="file" id="inQr" accept="image/*">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Upload Google Map Location</label>
-                <input type="file" id="inMapImage" accept="image/*">
-            </div>
-
-            <div class="counter-grid">
-                <div class="form-group">
-                    <label>Mipa</label>
-                    <input type="number" id="inMipa" value="" min="0">
-                </div>
-                <div class="form-group">
-                    <label>Hmeichhia</label>
-                    <input type="number" id="inHmeichhia" value="" min="0">
-                </div>
-                <div class="form-group">
-                    <label>Ruang Chhuak</label>
-                    <input type="number" id="inRuang" value="0" min="0">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Footer Notice Message (Manual text)</label>
-                <input type="text" id="inFooter"
-                    value="Vawiinah vui nghal tur a ni a, khawntesep pawh khawn nghal tur a ni a. Tlangval tlawmngai ten thlan laih nghal tur a ni.">
-            </div>
-
-            <button class="btn-submit" id="btnSubmit">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                Submit Data
-            </button>
-
-            <button class="btn-download" id="btnDownload">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                Download Poster Image
-            </button>
-        </div>
-
-        <div class="poster-scale-box">
-            <div class="poster-preview" id="posterArea">
-
-                <div class="poster-header-banner">
-                    <img src="header.jpg" alt="Young Mizo Association Zualko Header Banner">
-                    <div class="header-dynamic-subtitle" id="lblHeaderText"></div>
-                </div>
-
-                <div class="poster-body">
-                    <div class="details-side">
-                        <p><span class="label">HMING</span><span class="colon">:</span><span class="val" id="lblHming"></span></p>
-                        <p><span class="label">KUM</span><span class="colon">:</span><span class="val" id="lblKum"></span></p>
-                        <p><span class="label" id="lblRelationLabel">S/o</span><span class="colon">:</span><span class="val" id="lblSo"></span></p>
-                        <p><span class="label">SECTION</span><span class="colon">:</span><span class="val" id="lblSection"></span></p>
-                        <p><span class="label">THIH NI</span><span class="colon">:</span><span class="val" id="lblThihNi"></span></p>
-                        <p><span class="label">THIH HUN</span><span class="colon">:</span><span class="val" id="lblThihHun"></span></p>
-                        <p><span class="label">VUI NI</span><span class="colon">:</span><span class="val" id="lblVuiNi"></span></p>
-                        <p><span class="label">VUI HUN</span><span class="colon">:</span><span class="val" id="lblVuiHun"></span></p>
-                        <p><span class="label">VUITU</span><span class="colon">:</span><span class="val" id="lblVuitu"></span></p>
-                        <p><span class="label">KOHHRAN</span><span class="colon">:</span><span class="val" id="lblKohhran"></span></p>
+                    <div class="portal-form-group">
+                        <label>Password</label>
+                        <input type="password" id="userLoginPass" placeholder="Enter user password">
                     </div>
-
-                    <div class="avatar-center-zone">
-                        <div class="avatar-container">
-                            <img id="viewPassport"
-                                src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23ccc'/><text x='50' y='55' font-size='10' text-anchor='middle' fill='%23666'>No Photo (1:1 Ratio)</text></svg>">
-                        </div>
-                    </div>
-
-                    <div class="qr-right-zone">
-                        <h4>Mitthi<br>Chanchin<br>Tawi</h4>
-                        <div class="qr-box">
-                            <img id="viewQr"
-                                src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23eee'/><text x='50' y='55' font-size='12' text-anchor='middle' fill='%23aaa'>QR (1:1 Ratio)</text></svg>">
-                        </div>
-                    </div>
+                    <button id="btnUserSubmitLogin" class="btn-portal-action">User Login</button>
                 </div>
 
-                <div class="condolence-bar">
-                    Lusun chhungte kan tawrhpui hle..
-                    <img src="yma.jpg" class="condolence-flag" alt="YMA Flag">
+                <!-- Admin Login Box -->
+                <div class="portal-card admin-card">
+                    <h3>Admin Login</h3>
+                    <p>Zualko thununna leh data paih tihnate</p>
+                    <div class="portal-form-group">
+                        <label>Username</label>
+                        <input type="text" id="adminLoginName" placeholder="Enter admin username">
+                    </div>
+                    <div class="portal-form-group">
+                        <label>Password</label>
+                        <input type="password" id="adminLoginPass" placeholder="Enter admin password">
+                    </div>
+                    <button id="btnAdminSubmitLogin" class="btn-portal-action admin-btn">Admin Login</button>
                 </div>
-
-                <div class="map-wrapper">
-                    <div class="map-area">
-                        <img id="mapImage"
-                            src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='160' viewBox='0 0 600 160'><rect width='600' height='160' fill='%231b3d2f'/><text x='50% ' y='50%' fill='white' font-weight='bold' font-size='15' text-anchor='middle'>Upload Google Map Location (16:9 Ratio)</text></svg>">
-                    </div>
-                </div>
-
-                <div class="counters-section">
-                    <div class="counter-row">
-                        <div>MIPA : <span id="lblMipa">0</span></div>
-                        <div>HMEICHHIA : <span id="lblHmeichhia">0</span></div>
-                    </div>
-                    <div class="counter-row">
-                        <div>RUANG CHHUAK : <span id="lblRuang">0</span></div>
-                        <div>TOTAL : <span id="lblTotal">0</span></div>
-                    </div>
-                    <div class="total-row">
-                        THLANMUALA PHUM TAWH ZAWNG ZAWNG: <span id="lblThlanmual">0</span>
-                    </div>
-                </div>
-
-                <div class="poster-footer" id="lblFooter"></div>
             </div>
         </div>
     </div>
 
-    <!-- Persistent Storage Data List View Layout Panel -->
-    <div class="admin-data-section">
-        <div class="admin-auth-header">
-            <div class="header-left">
-                <h3>Mual Min Liam San Ta Te </h3>
-                
-                <!-- ONLY EXTRACT BUTTON RETAINED -->
-                <button id="btnExtractTablePDF" class="btn-extract-pdf">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-                    Extract to PDF
-                </button>
-            </div>
-            <div id="adminLoginArea">
-                <input type="text" id="adminUser" placeholder="Username">
-                <input type="password" id="adminPass" placeholder="Password">
-                <button id="btnLogin">Admin Login</button>
-            </div>
-            <div id="adminLogoutArea" style="display: none;">
-                <span class="admin-badge">Admin Mode Active</span>
-                <button id="btnLogout" class="btn-logout">Logout</button>
+
+    <!-- ==========================================================================
+       SECOND PAGE: APP DASHBOARD (Hidden until authorization matches)
+       ========================================================================== -->
+    <div id="mainDashboardApplication" style="display: none; width: 100%; max-width: 1300px;">
+        
+        <div class="dashboard-top-navigation">
+            <h1>Khuangpuilam YMA Zualko</h1>
+            <div class="nav-session-controls">
+                <span id="authRoleBadge" class="admin-badge"></span>
+                <button id="btnPerformLogout" class="btn-logout">Logout Terminal</button>
             </div>
         </div>
 
-        <div class="table-container">
-            <table id="dataTable">
-                <thead>
-                    <tr>
-                        <th style="width: 110px; text-align: center;">Photo</th>
-                        <th>Hming</th>
-                        <th>Kum</th>
-                        <th>Chhungte</th>
-                        <th>Section</th>
-                        <th>Thih Ni</th>
-                        <th>Kohhran</th>
-                        <th class="admin-actions" style="display: none;">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <!-- Dynamic Rows -->
-                </tbody>
-            </table>
+        <div class="container">
+            <!-- Form Control Panel -->
+            <div class="form-panel">
+                <h2>Chanchin Ziahluhna</h2>
+
+                <div class="form-group">
+                    <label>Zualko Subtitle Banner Text (e.g., Kum 2026-a 7-na)</label>
+                    <input type="text" id="inHeaderText" value="Kum 2026-a 7-na">
+                </div>
+
+                <div class="row-group">
+                    <div class="form-group">
+                        <label>Hming (Name)</label>
+                        <input type="text" id="inHming" value="">
+                    </div>
+                    <div class="form-group">
+                        <label>Kum (Age)</label>
+                        <input type="number" id="inKum" value="">
+                    </div>
+                </div>
+
+                <div class="row-group">
+                    <div class="form-group">
+                        <label>Chhungte (Relation & Name)</label>
+                        <div style="display: grid; grid-template-columns: 80px 1fr; gap: 8px;">
+                            <select id="inRelationType">
+                                <option value="W/o">W/o</option>
+                                <option value="H/o">H/o</option>
+                                <option value="S/o" selected>S/o</option>
+                                <option value="D/o">D/o</option>
+                                <option value="C/o">C/o</option>
+                            </select>
+                            <input type="text" id="inSo" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Section</label>
+                        <select id="inSection">
+                            <option value="Chawngbawla Section" selected>Chawngbawla Section</option>
+                            <option value="Vanapa Section">Vanapa Section</option>
+                            <option value="Taitesena Section">Taitesena Section</option>
+                            <option value="Khuangchera Section">Khuangchera Section</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row-group">
+                    <div class="form-group">
+                        <label>Thih Ni (Date of Death)</label>
+                        <input type="date" id="inThihNi">
+                    </div>
+                    <div class="form-group">
+                        <label>Thih Hun (Time of Death)</label>
+                        <input type="time" id="inThihHun">
+                    </div>
+                </div>
+
+                <div class="row-group">
+                    <div class="form-group">
+                        <label>Vui Ni (Funeral Date)</label>
+                        <input type="date" id="inVuiNi">
+                    </div>
+                    <div class="form-group">
+                        <label>Vui Hun (Funeral Time)</label>
+                        <input type="time" id="inVuiHun">
+                    </div>
+                </div>
+
+                <div class="row-group">
+                    <div class="form-group">
+                        <label>Vuitu (Officiator)</label>
+                        <input type="text" id="inVuitu" value="">
+                    </div>
+                    <div class="form-group">
+                        <label>Kohhran (Church)</label>
+                        <input type="text" id="inKohhran" value="">
+                    </div>
+                </div>
+
+                <div class="row-group">
+                    <div class="form-group">
+                        <label>Upload Passport Photo</label>
+                        <input type="file" id="inPassport" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label>Upload QR Code</label>
+                        <input type="file" id="inQr" accept="image/*">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Upload Google Map Location</label>
+                    <input type="file" id="inMapImage" accept="image/*">
+                </div>
+
+                <div class="counter-grid">
+                    <div class="form-group">
+                        <label>Mipa</label>
+                        <input type="number" id="inMipa" value="" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Hmeichhia</label>
+                        <input type="number" id="inHmeichhia" value="" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Ruang Chhuak</label>
+                        <input type="number" id="inRuang" value="0" min="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Footer Notice Message (Manual text)</label>
+                    <input type="text" id="inFooter"
+                        value="Vawiinah vui nghal tur a ni a, khawntesep pawh khawn nghal tur a ni a. Tlangval tlawmngai ten thlan laih nghal tur a ni.">
+                </div>
+
+                <button class="btn-submit" id="btnSubmit">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                    Submit Data
+                </button>
+
+                <button class="btn-download" id="btnDownload">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                    Download Poster Image
+                </button>
+            </div>
+
+            <!-- Poster Render Panel -->
+            <div class="poster-scale-box">
+                <div class="poster-preview" id="posterArea">
+
+                    <div class="poster-header-banner">
+                        <img src="header.jpg" alt="Young Mizo Association Zualko Header Banner">
+                        <div class="header-dynamic-subtitle" id="lblHeaderText"></div>
+                    </div>
+
+                    <div class="poster-body">
+                        <div class="details-side">
+                            <p><span class="label">HMING</span><span class="colon">:</span><span class="val" id="lblHming"></span></p>
+                            <p><span class="label">KUM</span><span class="colon">:</span><span class="val" id="lblKum"></span></p>
+                            <p><span class="label" id="lblRelationLabel">S/o</span><span class="colon">:</span><span class="val" id="lblSo"></span></p>
+                            <p><span class="label">SECTION</span><span class="colon">:</span><span class="val" id="lblSection"></span></p>
+                            <p><span class="label">THIH NI</span><span class="colon">:</span><span class="val" id="lblThihNi"></span></p>
+                            <p><span class="label">THIH HUN</span><span class="colon">:</span><span class="val" id="lblThihHun"></span></p>
+                            <p><span class="label">VUI NI</span><span class="colon">:</span><span class="val" id="lblVuiNi"></span></p>
+                            <p><span class="label">VUI HUN</span><span class="colon">:</span><span class="val" id="lblVuiHun"></span></p>
+                            <p><span class="label">VUITU</span><span class="colon">:</span><span class="val" id="lblVuitu"></span></p>
+                            <p><span class="label">KOHHRAN</span><span class="colon">:</span><span class="val" id="lblKohhran"></span></p>
+                        </div>
+
+                        <div class="avatar-center-zone">
+                            <div class="avatar-container">
+                                <img id="viewPassport"
+                                    src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23ccc'/><text x='50' y='55' font-size='10' text-anchor='middle' fill='%23666'>No Photo (1:1 Ratio)</text></svg>">
+                            </div>
+                        </div>
+
+                        <div class="qr-right-zone">
+                            <h4>Mitthi<br>Chanchin<br>Tawi</h4>
+                            <div class="qr-box">
+                                <img id="viewQr"
+                                    src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23eee'/><text x='50' y='55' font-size='12' text-anchor='middle' fill='%23aaa'>QR (1:1 Ratio)</text></svg>">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="condolence-bar">
+                        Lusun chhungte kan tawrhpui hle..
+                        <img src="yma.jpg" class="condolence-flag" alt="YMA Flag">
+                    </div>
+
+                    <div class="map-wrapper">
+                        <div class="map-area">
+                            <img id="mapImage"
+                                src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='160' viewBox='0 0 600 160'><rect width='600' height='160' fill='%231b3d2f'/><text x='50% ' y='50%' fill='white' font-weight='bold' font-size='15' text-anchor='middle'>Upload Google Map Location (16:9 Ratio)</text></svg>">
+                        </div>
+                    </div>
+
+                    <div class="counters-section">
+                        <div class="counter-row">
+                            <div>MIPA : <span id="lblMipa">0</span></div>
+                            <div>HMEICHHIA : <span id="lblHmeichhia">0</span></div>
+                        </div>
+                        <div class="counter-row">
+                            <div>RUANG CHHUAK : <span id="lblRuang">0</span></div>
+                            <div>TOTAL : <span id="lblTotal">0</span></div>
+                        </div>
+                        <div class="total-row">
+                            THLANMUALA PHUM TAWH ZAWNG ZAWNG: <span id="lblThlanmual">0</span>
+                        </div>
+                    </div>
+
+                    <div class="poster-footer" id="lblFooter"></div>
+                </div>
+            </div>
         </div>
+
+        <!-- Mual Min Liam San Ta Te Realtime Table Panel -->
+        <div class="admin-data-section">
+            <div class="admin-auth-header" style="border: none; padding: 0; margin: 0;">
+                <div class="header-left">
+                    <h3>Mual Min Liam San Ta Te </h3>
+                    <button id="btnExtractTablePDF" class="btn-extract-pdf">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                        Extract to PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="dataTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 110px; text-align: center;">Photo</th>
+                            <th>Hming</th>
+                            <th>Kum</th>
+                            <th>Chhungte</th>
+                            <th>Section</th>
+                            <th>Thih Ni</th>
+                            <th>Kohhran</th>
+                            <th class="admin-actions" style="display: none;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Instantly Synced Rows from Firebase Go Here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 
     <script src="script.js"></script>

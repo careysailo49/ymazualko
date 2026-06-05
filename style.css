@@ -753,3 +753,151 @@ tr:hover {
 .btn-delete:hover {
     background-color: #bb2d3b;
 }
+
+/* ==========================================================================
+   UNIFIED DUAL-AUTH LANDING OVERLAY INTERFACES
+   ========================================================================== */
+.portal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #1b3d2f 0%, #0c1b15 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.portal-wrapper {
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    width: 100%;
+    max-width: 900px;
+    text-align: center;
+}
+
+.portal-wrapper h2 {
+    font-size: 26px;
+    color: #111;
+    margin-bottom: 5px;
+}
+
+.portal-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.portal-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px;
+}
+
+@media (min-width: 768px) {
+    .portal-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.portal-card {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.portal-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.portal-card h3 {
+    font-size: 20px;
+    margin-bottom: 5px;
+    color: #212529;
+}
+
+.user-card h3 { color: #1a73e8; }
+.admin-card h3 { color: #dc3545; }
+
+.portal-card p {
+    font-size: 13px;
+    color: #6c757d;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.portal-form-group {
+    margin-bottom: 15px;
+}
+
+.portal-form-group label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #495057;
+    margin-bottom: 5px;
+    display: block;
+    text-transform: uppercase;
+}
+
+.portal-form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.btn-portal-action {
+    width: 100%;
+    padding: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    color: white;
+    background-color: #1a73e8;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: auto;
+    transition: background 0.15s ease;
+}
+
+.btn-portal-action:hover { background-color: #155cb4; }
+.admin-btn { background-color: #212529; }
+.admin-btn:hover { background-color: #000000; }
+
+/* Dashboard Top Title Navigation Configuration */
+.dashboard-top-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-bottom: 2px solid #1b3d2f;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.dashboard-top-navigation h1 {
+    margin: 0;
+    text-align: left;
+}
+
+.nav-session-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

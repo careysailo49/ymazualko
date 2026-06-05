@@ -1,3 +1,21 @@
+// ==========================================================================
+// FIREBASE CLOUD SYNC ARCHITECTURE
+// Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDFl4-sRsJV2ukzWRCeg5sCtO0g-6Yfj4Q",
+    authDomain: "ymazualko.firebaseapp.com",
+    projectId: "ymazualko",
+    storageBucket: "ymazualko.firebasestorage.app",
+    messagingSenderId: "881204955464",
+    appId: "1:881204955464:web:c07aa42e6a6348fb17cb7d",
+    measurementId: "G-ZE0X6GSC6Z"
+  };
+
+// Initialize Cloud Core Environment
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
 document.addEventListener("DOMContentLoaded", function () {
     const now = new Date();
 
@@ -17,8 +35,8 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('inVuiHun').value = currentTime;
 
     updatePoster();
-    loadTableData();
-    checkAdminSession();
+    evaluateSessionPersistence();
+    initializeRealtimeDatabaseListener();
 });        
 
 const inputs = ['inHming', 'inKum', 'inSo', 'inRelationType', 'inSection', 'inVuitu', 'inKohhran', 'inMipa', 'inHmeichhia', 'inRuang', 'inFooter', 'inHeaderText'];
@@ -141,9 +159,41 @@ document.getElementById('btnDownload').addEventListener('click', function () {
     });
 });
 
-/* ==========================================================================
-   DATA SUBMISSION MANAGEMENT LOGIC & LOCAL STORAGE SYNC
-   ========================================================================== */
+// ==========================================================================
+// CENTRAL REAL-TIME LIVE SUBSCRIBER STREAMS (FIREBASE DATABASES)
+// ==========================================================================
+function initializeRealtimeDatabaseListener() {
+    database.ref('zualkoRecords').on('value', (snapshot) => {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = "";
+        
+        const currentAuthRole = sessionStorage.getItem('zualkoAuthRole');
+        const isAdmin = currentAuthRole === 'admin';
+
+        if (snapshot.exists()) {
+            const serverRecords = snapshot.val();
+            Object.keys(serverRecords).forEach((uniqueKey) => {
+                const item = serverRecords[uniqueKey];
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="text-align: center;"><img src="${item.photo}" class="table-thumb" alt="photo"></td>
+                    <td><strong>${item.hming}</strong></td>
+                    <td>${item.kum}</td>
+                    <td>${item.chhungte}</td>
+                    <td>${item.section}</td>
+                    <td>${item.thihni}</td>
+                    <td>${item.kohhran}</td>
+                    <td class="admin-actions" style="display: ${isAdmin ? 'table-cell' : 'none'};">
+                        <button class="btn-delete" onclick="deleteRecord('${uniqueKey}')">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        toggleAdminInterfaceElements(isAdmin);
+    });
+}
+
 document.getElementById('btnSubmit').addEventListener('click', function() {
     const hming = document.getElementById('inHming').value.trim();
     if (!hming) {
@@ -154,7 +204,7 @@ document.getElementById('btnSubmit').addEventListener('click', function() {
     const defaultPlaceholder = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><rect width='100' height='100' fill='%23ccc'/><text x='50' y='55' font-size='10' text-anchor='middle' fill='%23666'>No Photo</text></svg>";
 
     const itemRecord = {
-        id: Date.now(),
+        timestamp: Date.now(),
         photo: currentPassportBase64 || defaultPlaceholder,
         hming: hming,
         kum: document.getElementById('inKum').value || 'N/A',
@@ -164,109 +214,117 @@ document.getElementById('btnSubmit').addEventListener('click', function() {
         kohhran: document.getElementById('inKohhran').value || 'N/A'
     };
 
-    let storageData = JSON.parse(localStorage.getItem('zualkoRecords')) || [];
-    storageData.push(itemRecord);
-    localStorage.setItem('zualkoRecords', JSON.stringify(storageData));
-
-    currentPassportBase64 = "";
-    document.getElementById('inHming').value = "";
-    document.getElementById('inKum').value = "";
-    document.getElementById('inSo').value = "";
-    document.getElementById('inKohhran').value = "";
-    document.getElementById('inPassport').value = "";
-    document.getElementById('viewPassport').src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23ccc'/><text x='50' y='55' font-size='10' text-anchor='middle' fill='%23666'>No Photo (1:1 Ratio)</text></svg>";
-
-    updatePoster();
-    loadTableData();
+    database.ref('zualkoRecords').push(itemRecord)
+        .then(() => {
+            currentPassportBase64 = "";
+            document.getElementById('inHming').value = "";
+            document.getElementById('inKum').value = "";
+            document.getElementById('inSo').value = "";
+            document.getElementById('inKohhran').value = "";
+            document.getElementById('inPassport').value = "";
+            document.getElementById('viewPassport').src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23ccc'/><text x='50' y='55' font-size='10' text-anchor='middle' fill='%23666'>No Photo (1:1 Ratio)</text></svg>";
+            updatePoster();
+        })
+        .catch((error) => {
+            alert("Data thun luh a hlawhchham: " + error.message);
+        });
 });
 
-function loadTableData() {
-    const storageData = JSON.parse(localStorage.getItem('zualkoRecords')) || [];
-    const tbody = document.getElementById('tableBody');
-    tbody.innerHTML = "";
+window.deleteRecord = function(uniqueKey) {
+    if(confirm("He record hi i paih duh chiang maw?")) {
+        database.ref(`zualkoRecords/${uniqueKey}`).remove()
+            .catch((error) => {
+                alert("Huih phelh a hlawhchham: " + error.message);
+            });
+    }
+};
 
-    const isAdmin = sessionStorage.getItem('adminAuthed') === 'true';
+// ==========================================================================
+// UNIFIED PORTAL APP ROUTER & SESSION MANAGEMENT 
+// ==========================================================================
+document.getElementById('btnUserSubmitLogin').addEventListener('click', function() {
+    const u = document.getElementById('userLoginName').value.trim();
+    const p = document.getElementById('userLoginPass').value.trim();
 
-    storageData.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td style="text-align: center;"><img src="${item.photo}" class="table-thumb" alt="photo"></td>
-            <td><strong>${item.hming}</strong></td>
-            <td>${item.kum}</td>
-            <td>${item.chhungte}</td>
-            <td>${item.section}</td>
-            <td>${item.thihni}</td>
-            <td>${item.kohhran}</td>
-            <td class="admin-actions" style="display: ${isAdmin ? 'table-cell' : 'none'};">
-                <button class="btn-delete" onclick="deleteRecord(${item.id})">Delete</button>
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
+    if (u === 'kpluser' && p === 'Kpluseryma@1') {
+        sessionStorage.setItem('zualkoAuthRole', 'user');
+        evaluateSessionPersistence();
+    } else {
+        alert("User credentials a dik lo.");
+    }
+});
 
-    toggleAdminElements(isAdmin);
-}
-
-/* ==========================================================================
-   AUTHENTICATION PROFILE SECURITY COMPONENT INTERFACES
-   ========================================================================== */
-document.getElementById('btnLogin').addEventListener('click', function() {
-    const u = document.getElementById('adminUser').value;
-    const p = document.getElementById('adminPass').value;
+document.getElementById('btnAdminSubmitLogin').addEventListener('click', function() {
+    const u = document.getElementById('adminLoginName').value.trim();
+    const p = document.getElementById('adminLoginPass').value.trim();
 
     if (u === 'kpladmin' && p === 'Mizoram@123') {
-        sessionStorage.setItem('adminAuthed', 'true');
-        checkAdminSession();
+        sessionStorage.setItem('zualkoAuthRole', 'admin');
+        evaluateSessionPersistence();
     } else {
-        alert("Username emaw Password a dik lo.");
+        alert("Admin credentials a dik lo.");
     }
 });
 
-document.getElementById('btnLogout').addEventListener('click', function() {
-    sessionStorage.removeItem('adminAuthed');
-    checkAdminSession();
+document.getElementById('btnPerformLogout').addEventListener('click', function() {
+    sessionStorage.removeItem('zualkoAuthRole');
+    evaluateSessionPersistence();
 });
 
-function checkAdminSession() {
-    const isAdmin = sessionStorage.getItem('adminAuthed') === 'true';
-    if(isAdmin) {
-        document.getElementById('adminLoginArea').style.display = 'none';
-        document.getElementById('adminLogoutArea').style.display = 'block';
+function evaluateSessionPersistence() {
+    const currentAuthRole = sessionStorage.getItem('zualkoAuthRole');
+    
+    const loginPortalGate = document.getElementById('loginPortalGate');
+    const mainDashboardApplication = document.getElementById('mainDashboardApplication');
+    const authRoleBadge = document.getElementById('authRoleBadge');
+
+    if (currentAuthRole === 'admin' || currentAuthRole === 'user') {
+        // Route View Transition to Main Dashboard Page
+        loginPortalGate.style.display = 'none';
+        mainDashboardApplication.style.display = 'block';
+
+        if(currentAuthRole === 'admin') {
+            authRoleBadge.innerText = "Admin Account Active";
+            authRoleBadge.style.backgroundColor = "#e6f4ea";
+            authRoleBadge.style.color = "#137333";
+            toggleAdminInterfaceElements(true);
+        } else {
+            authRoleBadge.innerText = "User Account Active";
+            authRoleBadge.style.backgroundColor = "#e8f0fe";
+            authRoleBadge.style.color = "#1a73e8";
+            toggleAdminInterfaceElements(false);
+        }
+        
+        // Dynamic full responsive resize calculations
+        structuralResponsiveResizeHandler();
     } else {
-        document.getElementById('adminLoginArea').style.display = 'block';
-        document.getElementById('adminLogoutArea').style.display = 'none';
+        // Fallback View Redirect to First Page Login Portal Form Frame
+        loginPortalGate.style.display = 'flex';
+        mainDashboardApplication.style.display = 'none';
+        toggleAdminInterfaceElements(false);
     }
     
-    document.getElementById('adminUser').value = "";
-    document.getElementById('adminPass').value = "";
-    
-    toggleAdminElements(isAdmin);
+    // Clear Input Terminal Buffers safely
+    document.getElementById('userLoginName').value = "";
+    document.getElementById('userLoginPass').value = "";
+    document.getElementById('adminLoginName').value = "";
+    document.getElementById('adminLoginPass').value = "";
 }
 
-function toggleAdminElements(show) {
+function toggleAdminInterfaceElements(show) {
     const cells = document.querySelectorAll('.admin-actions');
     cells.forEach(cell => {
         cell.style.display = show ? 'table-cell' : 'none';
     });
 }
 
-window.deleteRecord = function(id) {
-    if(confirm("He record hi i paih duh chiang maw?")) {
-        let storageData = JSON.parse(localStorage.getItem('zualkoRecords')) || [];
-        storageData = storageData.filter(item => item.id !== id);
-        localStorage.setItem('zualkoRecords', JSON.stringify(storageData));
-        loadTableData();
-    }
-};
-
-/* ==========================================================================
-   DIRECT HTML TABLE SNAPSHOT EXTRACTOR TO PDF (AS DISPLAYED ON SCREEN)
-   ========================================================================== */
+// ==========================================================================
+// DIRECT HTML TABLE SNAPSHOT EXTRACTOR TO PDF 
+// ==========================================================================
 document.getElementById('btnExtractTablePDF').addEventListener('click', function () {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('l', 'mm', 'a4'); // Landscape setup
+    const doc = new jsPDF('l', 'mm', 'a4');
 
-    // Document Titles
     doc.setFont("Helvetica", "bold");
     doc.setFontSize(16);
     doc.text("Khuangpuilam YMA Zualko Khawlkhawmna List", 14, 15);
@@ -281,39 +339,29 @@ document.getElementById('btnExtractTablePDF').addEventListener('click', function
         return;
     }
 
-    // Determine if Admin Mode column is currently visible on screen
-    const isAdminModeActive = sessionStorage.getItem('adminAuthed') === 'true';
+    const currentAuthRole = sessionStorage.getItem('zualkoAuthRole');
+    const isAdminModeActive = currentAuthRole === 'admin';
 
-    // Parse the live HTML table directly into jsPDF matching screen appearance
     doc.autoTable({
         html: '#dataTable',
         startY: 26,
         theme: 'grid',
-        headStyles: { fillColor: [27, 61, 47], fontStyle: 'bold', halign: 'center' }, // Theme dark green
+        headStyles: { fillColor: [27, 61, 47], fontStyle: 'bold', halign: 'center' },
         styles: { fontSize: 10, verticalAlign: 'middle', minCellHeight: 32 },
         columnStyles: {
-            0: { width: 35, halign: 'center' }, // Fix Photo cell spacing bounds perfectly
+            0: { width: 35, halign: 'center' },
             1: { fontStyle: 'bold' }
         },
-        // Cut out the final Action/Delete button column if admin is logged in to match clean layout appearance
-        columns: isAdminModeActive 
-            ? [0, 1, 2, 3, 4, 5, 6] 
-            : undefined,           
+        columns: isAdminModeActive ? [0, 1, 2, 3, 4, 5, 6] : undefined,           
         
         didDrawCell: function (data) {
-            // Find the first column cell block within the body container
             if (data.section === 'body' && data.column.index === 0) {
-                // Clear the cell contents raw text string representation
                 data.cell.text = [""];
-                
-                // Find the live img element embedded inside that specific table cell row
                 const rawImgElement = data.cell.raw.querySelector('img');
                 
                 if (rawImgElement && rawImgElement.src.startsWith('data:image')) {
                     const imgDataUrl = rawImgElement.src;
-                    const size = 26; // Match cell dimensions exactly (26mm box)
-                    
-                    // Math structure ensuring image remains perfectly centered inside the cell box boundaries
+                    const size = 26;
                     const x = data.cell.x + (data.cell.width - size) / 2;
                     const y = data.cell.y + (data.cell.height - size) / 2;
 
