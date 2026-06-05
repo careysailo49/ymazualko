@@ -250,7 +250,7 @@ document.getElementById('btnUserSubmitLogin').addEventListener('click', function
         sessionStorage.setItem('zualkoAuthRole', 'user');
         evaluateSessionPersistence();
     } else {
-        alert("User credentials a dik lo.");
+        alert("Uluk Deuhin Awwww!!!");
     }
 });
 
@@ -262,7 +262,7 @@ document.getElementById('btnAdminSubmitLogin').addEventListener('click', functio
         sessionStorage.setItem('zualkoAuthRole', 'admin');
         evaluateSessionPersistence();
     } else {
-        alert("Admin credentials a dik lo.");
+        alert("Uluk Deuhin Awwww!!!");
     }
 });
 
